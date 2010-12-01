@@ -39,18 +39,14 @@
 #	1 -> The access time is not updated.
 #
 
-
+#after=`stat $filename | grep Access | awk '{print $3}' | tail -n 1`	
 function check_atime_updated
 {
 	typeset filename=$1
-
-	typeset before=$(stat --printf=%x $filename | $AWK '{print $2}')
-
-	log_must $CAT $filename 
-
-	typeset after=$(stat --printf=%x $filename | $AWK '{print $2}')
-
-	if [[ $before != $after ]]; then
+	typeset before=$($STAT --printf=%x $filename | $AWK '{print $2}')
+	log_must $CAT $filename
+	typeset after=$($STAT --printf=%x $filename | $AWK '{print $2}')
+	if [[ before != after ]]; then
 		return 0
 	else 
 		return 1
@@ -60,7 +56,6 @@ function check_atime_updated
 function setup_snap_clone
 {
 	# Create two file to verify snapshot.
-	echo "testfile $TESTFILE"
 	log_must $TOUCH $TESTDIR/$TESTFILE
 	create_snapshot $TESTPOOL/$TESTFS $TESTSNAP
 	create_clone $TESTPOOL/$TESTFS@$TESTSNAP $TESTPOOL/$TESTCLONE

@@ -176,9 +176,8 @@ function log_pos
 {
 	typeset out=""
 	typeset logfile="/tmp/log.$$"
-
 	while [[ -e $logfile ]]; do
-		logfile="$logfile"
+		logfile="$logfile.$$"
 	done
 	echo "args to log_pos : $@"
 	"$@" 2>$logfile
@@ -381,7 +380,6 @@ function _printsuccess
 function _recursive_output #logfile
 {
 	typeset logfile=$1
-
 	while [[ -e $logfile ]]; do
 		if [[ -z $2 || $logfile != $1 ]]; then
 			$CAT $logfile

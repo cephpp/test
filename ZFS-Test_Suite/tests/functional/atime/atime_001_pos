@@ -28,9 +28,9 @@
 #
 
 . $STF_SUITE/commands.cfg
+. $STF_SUITE/include/default_common_varible.kshlib
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/tests/functional/atime/atime_common.kshlib
-. $STF_SUITE/include/default_common_varible.kshlib
 ################################################################################
 #
 # __stc_assertion_start 
@@ -61,7 +61,7 @@
 verify_runnable "both"
 
 log_assert "Setting atime=on, the access time for files is updated when read."
-log_onexit cleanup
+#log_onexit cleanup
 
 #
 # Create $TESTFILE, snapshot and clone.
@@ -71,13 +71,13 @@ setup_snap_clone
 for dst in $TESTPOOL/$TESTFS $TESTPOOL/$TESTCLONE $TESTPOOL/$TESTFS@$TESTSNAP 
 do
 	typeset mtpt=$(get_prop mountpoint $dst)
-
 	if [[ $dst == $TESTPOOL/$TESTFS@$TESTSNAP ]]; then
 		mtpt=$(snapshot_mountpoint $dst)
-#		log_mustnot check_atime_updated $mtpt/$TESTFILE
+		log_mustnot check_atime_updated $mtpt/$TESTFILE
 	else
 		log_must $ZFS set atime=on $dst
 		log_must check_atime_updated $mtpt/$TESTFILE
+		
 	fi
 done
 
