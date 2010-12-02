@@ -30,10 +30,20 @@
 . $STF_SUITE/commands.cfg
 . $STF_SUITE/include/default_common_varible.kshlib
 . $STF_SUITE/include/libtest.kshlib
-#. $STF_SUITE/default.cfg
 
 
-DISKS="$@"
+DISKS=$1
+
+if test $# -ne 1
+then
+    echo "USAGE : setup.ksh <DiskName>"
+    exit 1
+fi
+
+if [ $(id -u) != 0 ]; then
+         echo "USAGE: You must be run this script as root"
+	 exit 1	
+fi
 
 $ZPOOL history > /dev/null 2>&1
 (($? != 0)) && log_unsupported

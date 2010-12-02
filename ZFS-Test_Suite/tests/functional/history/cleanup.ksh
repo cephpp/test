@@ -30,6 +30,12 @@
 . $STF_SUITE/commands.cfg
 . $STF_SUITE/include/libtest.kshlib
 
+
+if [ $(id -u) != 0 ]; then
+         echo "USAGE: You must be run this script as root"
+	 exit 1	
+fi
+
 $ZPOOL history > /dev/null 2>&1
 (($? != 0)) && log_unsupported
 

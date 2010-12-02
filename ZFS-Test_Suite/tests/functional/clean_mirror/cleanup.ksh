@@ -33,6 +33,12 @@ DISKS="$@"
 . $STF_SUITE/include/default_common_varible.kshlib
 . ./default.cfg
 
+
+if [ $(id -u) != 0 ]; then
+         echo "USAGE: You must be run this script as root"
+	 exit 1	
+fi
+
 verify_runnable "global"
 
 $DF -F zfs -h | $GREP "$TESTFS " >/dev/null

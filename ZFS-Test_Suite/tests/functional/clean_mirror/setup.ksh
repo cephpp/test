@@ -36,8 +36,18 @@ DISKS="$@"
 . $STF_SUITE/include/default_common_varible.kshlib
 . ./default.cfg
 
+if test $# -ne 2
+then
+    echo "USAGE : setup.ksh <Primary_Mirror_disk> <Secondary_Mirror_disk>"
+    exit 1
+fi
 
-#verify_runnable "global"
+if [ $(id -u) != 0 ]; then
+         echo "USAGE: You must be run this script as root"
+	 exit 1	
+fi
+
+verify_runnable "global"
 
 #if ! $(is_physical_device $DISKS) ; then
 #	log_unsupported "This directory cannot be run on raw files."
