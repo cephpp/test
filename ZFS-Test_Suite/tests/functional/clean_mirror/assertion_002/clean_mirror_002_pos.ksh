@@ -62,6 +62,12 @@ FILE_WRITE=$STF_SUITE/bin/file_write
 #
 ################################################################################
 
+if test $# -ne 1
+then
+    echo "USAGE : clean_mirror_002_.ksh Secondary_Mirror_disk"
+    exit 1
+fi
+
 verify_runnable "global"
 
 log_assert "The primary side of a zpool mirror may be completely wiped" \

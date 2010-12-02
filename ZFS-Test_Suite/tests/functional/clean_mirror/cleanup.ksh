@@ -41,9 +41,9 @@ destroy_pool $TESTPOOL
 
 # recreate and destroy a zpool over the disks to restore the partitions to
 # normal
-if [[ -n $SINGLE_DISK ]]; then
-	log_must cleanup_devices $MIRROR_PRIMARY
-else
-	log_must cleanup_devices $MIRROR_PRIMARY $MIRROR_SECONDARY
-fi
+#if [[ -n $SINGLE_DISK ]]; then
+#	log_must cleanup_devices $MIRROR_PRIMARY
+#else
+#	log_must cleanup_devices $MIRROR_PRIMARY $MIRROR_SECONDARY
+#fi
 log_pass

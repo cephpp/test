@@ -28,6 +28,7 @@
 #
 
 DISKS="$@"
+
 . $STF_SUITE/commands.cfg
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/include/default_common_varible.kshlib
@@ -60,6 +61,12 @@ FILE_WRITE=$STF_SUITE/bin/file_write
 # __stc_assertion_end
 #
 ################################################################################
+
+if test $# -ne 1
+then
+    echo "USAGE : clean_mirror_003_.ksh Primary_Mirror_disk"
+    exit 1
+fi
 
 verify_runnable "global"
 
