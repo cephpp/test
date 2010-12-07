@@ -28,11 +28,11 @@
 #
 
 
-. $STF_SUITE/include/libtest.kshlib
-. $STF_SUITE/tests/functional/cachefile/cachefile.kshlib
 . $STF_SUITE/commands.cfg
-. $STF_SUITE/tests/functional/cachefile/cachefile.cfg
+. $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/include/default_common_varible.kshlib
+. $STF_SUITE/tests/functional/cachefile/cachefile.cfg
+. $STF_SUITE/tests/functional/cachefile/cachefile.kshlib
 
 
 #################################################################################
@@ -81,7 +81,6 @@ function cleanup
 		fi
 		((i += 1))
 	done
-	
 	if poolexists $TESTPOOL ; then
 		destroy_pool $TESTPOOL
 	fi
@@ -101,6 +100,8 @@ log_must $ZPOOL create $TESTPOOL $DISKS
 
 mntpnt=$(get_prop mountpoint $TESTPOOL)
 typeset -i i=0
+
+############# Create two device
 while ((i < 2)); do
 	log_must $DD if=/dev/zero of=$mntpnt/vdev$i bs=1M count=64
 	eval vdev$i=$mntpnt/vdev$i
@@ -108,40 +109,44 @@ while ((i < 2)); do
 done
 
 
+############# Create first pool with one same cahcefile1.
 log_must $ZPOOL create -o cachefile=$CPATH1 $TESTPOOL1 $vdev0
 log_must pool_in_cache $TESTPOOL1 $CPATH1
 
+############# Create second pool with one same cahcefile1.
 log_must $ZPOOL create -o cachefile=$CPATH1 $TESTPOOL2 $vdev1
 log_must pool_in_cache $TESTPOOL2 $CPATH1
 
+
 log_must $ZPOOL set cachefile=$CPATH2 $TESTPOOL1
 log_must pool_in_cache $TESTPOOL1 $CPATH2
-
 log_must $ZPOOL set cachefile=$CPATH2 $TESTPOOL2
 log_must pool_in_cache $TESTPOOL2 $CPATH2
-
+############ Verify cachefile1 not exist.
 if [[ -f $CPATH1 ]]; then
 	log_fail "Verify set when cachefile is set on pool."
 fi
 
-umount /$TESTPOOL1			#temp changes
+#############  Export the two pools.
+#umount /$TESTPOOL1			#temp changes
 log_must $ZPOOL export $TESTPOOL1
-umount /$TESTPOOL2			#temp cahnges
+#umount /$TESTPOOL2			#temp cahnges
 log_must $ZPOOL export $TESTPOOL2
+############ Verify cachefile2 not exist.
 if [[ -f $CPATH2 ]]; then
 	log_fail "Verify export when cachefile is set on pool."
 fi
 
+######### Import the two pools and set cachefile to cachefile2.
 log_must $ZPOOL import -d $mntpnt $TESTPOOL1
 log_must $ZPOOL set cachefile=$CPATH2 $TESTPOOL1
 log_must pool_in_cache $TESTPOOL1 $CPATH2
-
 log_must $ZPOOL import -d $mntpnt $TESTPOOL2
 log_must $ZPOOL set cachefile=$CPATH2 $TESTPOOL2
 log_must pool_in_cache $TESTPOOL2 $CPATH2
 
+########## Destroy the two pools.
 log_must $ZPOOL destroy $TESTPOOL1
-
 log_must $ZPOOL destroy $TESTPOOL2
 if [[ -f $CPATH2 ]]; then
 	log_fail "Verify destroy when cachefile is set on pool."

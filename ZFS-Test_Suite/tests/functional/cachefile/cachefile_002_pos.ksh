@@ -27,9 +27,9 @@
 # ident	"@(#)cachefile_002_pos.ksh	1.2	09/01/13 SMI"
 #
 
+. $STF_SUITE/commands.cfg
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/tests/functional/cachefile/cachefile.kshlib
-. $STF_SUITE/commands.cfg
 . $STF_SUITE/tests/functional/cachefile/cachefile.cfg
 . $STF_SUITE/include/default_common_varible.kshlib
 
@@ -75,6 +75,7 @@ verify_runnable "global"
 
 log_assert "Importing a pool with \"cachefile\" set doesn't update zpool.cache"
 log_onexit cleanup
+
 
 log_must $ZPOOL create -o cachefile=none $TESTPOOL $DISKS
 typeset DEVICEDIR=$(get_device_dir $DISKS)

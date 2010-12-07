@@ -59,9 +59,7 @@
 # __stc_assertion_end
 #
 ################################################################################
-
 DISKS="$@"
-
 function cleanup
 {
 	typeset file
@@ -90,7 +88,6 @@ typeset -i i=0
 
 while (( i < ${#opts[*]} )); do
 	log_must $ZPOOL create -o cachefile=${opts[i]} $TESTPOOL $DISKS
-
 	case ${opts[((i+1))]} in
 		false) log_mustnot pool_in_cache $TESTPOOL
 			;;
@@ -103,10 +100,7 @@ while (( i < ${#opts[*]} )); do
 		log_fail "cachefile property not set as expected. " \
 			"Expect: ${opts[((i+2))]}, Current: $PROP"
 	fi
-	
-	umount /$TESTPOOL			#temp changes 
 	log_must $ZPOOL destroy $TESTPOOL
-	rm -rf /$TESTPOOL 			#temp changes
 	sleep 10
 	(( i = i + 3 ))
 done
