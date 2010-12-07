@@ -30,8 +30,9 @@
 . $STF_SUITE/commands.cfg
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/include/default_common_varible.kshlib
-. $STF_SUITE/STF/usr/src/tools/stf/contrib/include/logapi.kshlib
 . $STF_SUITE/tests/functional/compression/compress.cfg
+. $STF_SUITE/STF/usr/src/tools/stf/contrib/include/logapi.kshlib
+
 
 ################################################################################
 #
@@ -69,13 +70,13 @@ log_note "Ensure compression is off"
 log_must $ZFS set compression=off $TESTPOOL/$TESTCTR
 
 log_note "Writing file without compression..."
-log_must ./$FILE_WRITE -o $OP -f $TESTDIR1/$TESTFILE0 -b $BLOCKSZ \
+log_must $FILE_WRITE -o $OP -f $TESTDIR1/$TESTFILE0 -b $BLOCKSZ \
     -c $NUM_WRITES -d $DATA
 
 log_note "Add compression property to the dataset and write another file"
 log_must $ZFS set compression=on $TESTPOOL/$TESTCTR
 
-log_must ./$FILE_WRITE -o $OP -f $TESTDIR1/$TESTFILE1 -b $BLOCKSZ \
+log_must $FILE_WRITE -o $OP -f $TESTDIR1/$TESTFILE1 -b $BLOCKSZ \
     -c $NUM_WRITES -d $DATA
 
 $SLEEP 60

@@ -28,11 +28,16 @@
 #
 
 . $STF_SUITE/commands.cfg
+. $STF_SUITE/tests/functional/compression/compress.cfg
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/include/default_common_varible.kshlib
 . $STF_SUITE/STF/usr/src/tools/stf/contrib/include/logapi.kshlib
 
 DISK=$1
 
-#default_container_setup $DISK
-default_setup $DISK
+default_container_setup $DISK
+#default_setup $DISK
+
+
+
+
