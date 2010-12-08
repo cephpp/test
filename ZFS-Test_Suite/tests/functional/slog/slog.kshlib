@@ -26,10 +26,7 @@
 # ident	"@(#)slog.kshlib	1.2	08/11/03 SMI"
 #
 
-. $STF_SUITE/include/libtest.kshlib
-. $STF_SUITE/commands.cfg
-. $STF_SUITE/include/default_common_varible.kshlib
-. $STF_SUITE/tests/functional/slog/slog.cfg
+
 function cleanup
 {
 	if datasetexists $TESTPOOL ; then
@@ -120,7 +117,6 @@ function verify_slog_device
 		typeset stat=${dev_stat_tab[((i+1))]}
 		case $dev in
 			stripe:$device)
-				echo " hi"	
 				if [[ "$type" == 'mirror' ]]; then
 					log_note "Unexpected type: mirror"
 					return 1
@@ -134,7 +130,6 @@ function verify_slog_device
 				fi
 				;;
 			mirror:$device)
-				echo "hello"
 				if [[ -z "$type" || $type == 'stripe' ]]; then
 					log_note "Unexpected type: stripe"
 					return 1

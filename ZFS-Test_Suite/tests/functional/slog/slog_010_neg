@@ -27,7 +27,13 @@
 # ident	"@(#)slog_010_neg.ksh	1.1	07/07/31 SMI"
 #
 
+. $STF_SUITE/commands.cfg
+. $STF_SUITE/include/libtest.kshlib
+. $STF_SUITE/include/default_common_varible.kshlib
+. $STF_SUITE/tests/functional/slog/slog.cfg
 . $STF_SUITE/tests/functional/slog/slog.kshlib
+. $STF_SUITE/STF/usr/src/tools/stf/contrib/include/logapi.kshlib
+
 
 #################################################################################
 #
@@ -62,7 +68,7 @@ log_onexit cleanup
 log_must $ZPOOL create $TESTPOOL $VDEV spare $SDEV log $LDEV
 sdev=$(random_get $SDEV)
 ldev=$(random_get $LDEV)
-log_mustnot $ZPOOL replace $TESTPOOL $ldev $sdev
+log_mustnot $ZPOOL replace -f $TESTPOOL  $sdev $ldev # change made here
 log_mustnot verify_slog_device $TESTPOOL $sdev 'ONLINE'
 log_must verify_slog_device $TESTPOOL $ldev 'ONLINE'
 

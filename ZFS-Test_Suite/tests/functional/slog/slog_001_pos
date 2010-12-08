@@ -27,6 +27,10 @@
 # ident	"@(#)slog_001_pos.ksh	1.1	07/07/31 SMI"
 #
 
+. $STF_SUITE/commands.cfg
+. $STF_SUITE/include/libtest.kshlib
+. $STF_SUITE/include/default_common_varible.kshlib
+. $STF_SUITE/tests/functional/slog/slog.cfg
 . $STF_SUITE/tests/functional/slog/slog.kshlib
 
 #################################################################################
@@ -64,13 +68,11 @@ do
 	do
 		for logtype in "" "mirror"
 		do
-			echo " VDEV = $VDEV"
 			log_must $ZPOOL create $TESTPOOL $type -f $VDEV \
 				$spare $SDEV log $logtype $LDEV
 			log_must display_status $TESTPOOL
 
 			ldev=$(random_get $LDEV)
-			echo "ldev = $ldev"
 			log_must verify_slog_device \
 				$TESTPOOL $ldev 'ONLINE' $logtype
 
