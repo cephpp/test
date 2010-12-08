@@ -105,7 +105,7 @@ log_must $ZFS set reservation=$RESV_SIZE $TESTPOOL/$TESTFS
 fill_size=`expr $RESV_SIZE + 20971520`
 write_count=`expr $fill_size / $BLOCK_SIZE`
 
-log_must ./$FILE_WRITE -o create -f $TESTDIR/$TESTFILE1 -b $BLOCK_SIZE \
+log_must $FILE_WRITE -o create -f $TESTDIR/$TESTFILE1 -b $BLOCK_SIZE \
 	-c $write_count -d 0
 
 log_pass "Able to create files inside and outside reserved area"

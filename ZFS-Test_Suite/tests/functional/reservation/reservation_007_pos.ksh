@@ -109,8 +109,7 @@ function create_resv_destroy { # args1 dataset1 args2 dataset2
 
 	avail_aft_dset1=`get_prop available $TESTPOOL`
 	used_aft_dset1=`get_prop used $TESTPOOL`
-	echo $args2
-	echo $dataset2
+
 	log_must $ZFS create $args2 $dataset2
 
 	log_must $ZFS set reservation=$RESV_SIZE $dataset2

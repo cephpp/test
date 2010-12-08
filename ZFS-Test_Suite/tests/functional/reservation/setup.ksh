@@ -37,6 +37,15 @@ verify_runtime $RT_MEDIUM
 
 DISK=$1
 
+if [ $(id -u) != 0 ]; then
+    echo "You must run as root"
+fi
+
+if [ $# != 1 ]; then
+    echo "USAGE : setup.ksh <Diskname>"
+    exit 1
+fi
+
 default_setup $DISK
 
 #default_setup_noexit $DISK
