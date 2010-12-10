@@ -72,7 +72,7 @@ function cleanup
 
 log_assert "Ensure file with random blocks is truncated properly"
 
-options=""
+zoptions=""
 options_display="default options"
 
 DISKS="$@"
