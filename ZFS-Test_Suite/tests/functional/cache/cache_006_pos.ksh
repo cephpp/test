@@ -27,14 +27,11 @@
 # ident	"@(#)cache_006_pos.ksh	1.3	09/05/19 SMI"
 #
 
-#. $STF_SUITE/tests/functional/cache/cache.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/tests/functional/cache/cache.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/tests/functional/cache/cache.cfg
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/include/default_common_varible.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/include/libtest.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/commands.cfg
-
-#################################################################################
+. $STF_SUITE/tests/functional/cache/cache.kshlib
+. $STF_SUITE/tests/functional/cache/cache.cfg
+. $STF_SUITE/include/default_common_varible.kshlib
+. $STF_SUITE/include/libtest.kshlib
+. $STF_SUITE/commands.cfg
 #
 # __stc_assertion_start
 #
@@ -83,8 +80,12 @@ do
 	# Nomal export/import operating
 	#
 	log_must $ZPOOL export $TESTPOOL
+	
+	#/$VDIR/c
+
+
 	#log_must $ZPOOL import -d $VDIR $TESTPOOL
-	log_must $ZPOOL import -d /$VDIR/a /$VDIR/b /$VDIR/c $TESTPOOL
+	log_must $ZPOOL import -d /$VDIR $TESTPOOL
 	log_must display_status $TESTPOOL
 	#ldev=$(random_get $LDEV $LDEV2)
 	#log_must verify_cache_device \
@@ -102,7 +103,7 @@ do
 	#log_must verify_cache_device \
 	#	$TESTPOOL $ldev 'ONLINE'
 	
-	log_must umount $TESTPOOL
+	#log_must umount $TESTPOOL
 	#log_must $ZFS umount $TESTPOOL
 	log_must $ZPOOL destroy -f $TESTPOOL
 done

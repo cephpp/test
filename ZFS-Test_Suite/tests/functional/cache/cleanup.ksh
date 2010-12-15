@@ -1,4 +1,4 @@
-#!/usr/bin/ksh -p
+#!/bin/ksh -p
 #
 # CDDL HEADER START
 #
@@ -28,6 +28,11 @@
 #
 
 . $STF_SUITE/tests/functional/cache/cache.kshlib
+. $STF_SUITE/tests/functional/cache/cache.cfg
+. $STF_SUITE/commands.cfg
+. $STF_SUITE/include/default_common_varible.kshlib
+. $STF_SUITE/STF/usr/src/tools/stf/contrib/include/logapi.kshlib
+. $STF_SUITE/include/libtest.kshlib
 
 verify_runnable "global"
 verify_runtime $RT_LONG

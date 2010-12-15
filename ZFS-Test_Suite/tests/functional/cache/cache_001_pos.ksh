@@ -70,14 +70,18 @@ do
 
 	log_must $ZPOOL create -f $TESTPOOL $type /$VDIR/a /$VDIR/b /$VDIR/c cache $1
 	log_must display_status $TESTPOOL
-	
+
+	$ZPOOL status	
 
 	#ldev=$(random_get $LDEV)
 	ldev=$1
-	log_must verify_cache_device tank $ldev 'ONLINE' 
+	
+	$SLEEP 10
+
+	log_must verify_cache_device $TESTPOOL $ldev 'ONLINE' 
 
 
-	#log_must $ZPOOL remove $TESTPOOL $ldev
+	log_must $ZPOOL remove $TESTPOOL $ldev
 	log_must check_vdev_state $TESTPOOL $ldev ""
 	log_must umount $TESTPOOL
 	log_must $ZPOOL destroy -f $TESTPOOL

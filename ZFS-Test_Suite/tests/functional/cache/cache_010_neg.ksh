@@ -27,14 +27,11 @@
 # ident	"@(#)cache_010_neg.ksh	1.1	08/05/14 SMI"
 #
 
-#. $STF_SUITE/tests/functional/cache/cache.kshlib
-
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/tests/functional/cache/cache.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/tests/functional/cache/cache.cfg
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/include/default_common_varible.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/include/libtest.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/commands.cfg
-
+. $STF_SUITE/commands.cfg
+. $STF_SUITE/include/libtest.kshlib
+. $STF_SUITE/include/default_common_varible.kshlib
+. $STF_SUITE/tests/functional/cache/cache.cfg
+. $STF_SUITE/tests/functional/cache/cache.kshlib
 #################################################################################
 #
 # __stc_assertion_start
@@ -60,7 +57,8 @@
 ################################################################################
 
 #verify_runnable "global"
-VDIR=`ls / | grep "disk" | tail -1`
+VDIR=`ls / | grep "disk" | head -1`
+VDIR2=`ls / | grep "disk" | tail -1`
 
 function cleanup_testenv
 {
@@ -73,31 +71,35 @@ function cleanup_testenv
 log_assert "Cache device can only be disk or slice."
 #log_onexit cleanup_testenv
 
-dsk1=${DISKS%% *}
-echo ""
-echo $disk1
-echo ""
-log_must $ZPOOL create $TESTPOOL ${DISKS#$dsk1}
-
+#dsk1=${DISKS%% *}
+disk="$1"
+disk1="$2"
+#log_must $ZPOOL create $TESTPOOL ${DISKS#$dsk1}
+log_must $ZPOOL create -f  $TESTPOOL $disk
 # Add nomal disk
-log_must $ZPOOL add $TESTPOOL cache $dsk1
-log_must verify_cache_device $TESTPOOL $dsk1 'ONLINE'
-# Add nomal file
-log_mustnot $ZPOOL add $TESTPOOL cache $VDEV2
+log_must $ZPOOL add $TESTPOOL cache $2
+log_must verify_cache_device $TESTPOOL $2 'ONLINE' cache
+#log_mustnot $ZPOOL add $TESTPOOL cache $VDEV2
+
+log_mustnot $ZPOOL add $TESTPOOL cache $VDIR2/a $VDIR2/b
 
 # Add lofi device
-lofidev=${VDEV2%% *}
-log_must $LOFIADM -a $lofidev
-lofidev=$($LOFIADM $lofidev)
-log_mustnot $ZPOOL add $TESTPOOL cache $lofidev
-if [[ -n $lofidev ]]; then
-	log_must $LOFIADM -d $lofidev
-	lofidev=""
-fi
+#lofidev=${VDEV2%% *}
+#log_must $LOFIADM -a $lofidev
+#lofidev=$($LOFIADM $lofidev)
+#log_mustnot $ZPOOL add $TESTPOOL cache $lofidev
+#if [[ -n $lofidev ]]; then
+#	log_must $LOFIADM -d $lofidev
+#	lofidev=""
+#fi
 
 #Add zvol
-log_must $ZPOOL create $TESTPOOL2 $VDEV2
+#log_must $ZPOOL create $TESTPOOL2 $VDEV2
+
+log_must $ZPOOL create $TESTPOOL2 /$VDIR2/a /$VDIR2/b
 log_must $ZFS create -V $SIZE $TESTPOOL2/$TESTVOL
-log_mustnot $ZPOOL add $TESTPOOL cache /dev/zvol/dsk/$TESTPOOL2/$TESTVOL
+log_must $ZPOOL add $TESTPOOL cache /dev/$TESTPOOL2/$TESTVOL
+
+$ZPOOL status
 
 log_pass "Cache device can only be disk or slice."

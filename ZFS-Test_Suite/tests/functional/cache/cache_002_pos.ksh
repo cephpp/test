@@ -75,7 +75,7 @@ do
 	typeset ldev=$1
 	log_must verify_cache_device $TESTPOOL $ldev 'ONLINE'
 
-	#log_must $ZPOOL remove $TESTPOOL $ldev
+	log_must $ZPOOL remove $TESTPOOL $ldev
 	log_must check_vdev_state $TESTPOOL $ldev ""
 
 	log_must umount $TESTPOOL

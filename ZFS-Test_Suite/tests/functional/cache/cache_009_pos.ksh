@@ -27,12 +27,11 @@
 # ident	"@(#)cache_009_pos.ksh	1.2	09/05/19 SMI"
 #
 
-#. $STF_SUITE/tests/functional/cache/cache.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/tests/functional/cache/cache.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/tests/functional/cache/cache.cfg
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/include/default_common_varible.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/include/libtest.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/commands.cfg
+. $STF_SUITE/tests/functional/cache/cache.kshlib
+. $STF_SUITE/tests/functional/cache/cache.cfg
+. $STF_SUITE/include/default_common_varible.kshlib
+. $STF_SUITE/include/libtest.kshlib
+. $STF_SUITE/commands.cfg
 
 #################################################################################
 #

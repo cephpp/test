@@ -52,12 +52,12 @@ verify_runtime $RT_LONG
 #	log_must $RM -rf $DIRV2
 #fi
 log_must $MKDIR -p $VDIR $VDIR2
-dd if=/dev/zero of=$VDIR/a bs=2M count=32
-dd if=/dev/zero of=$VDIR/b bs=2M count=32
-dd if=/dev/zero of=$VDIR/c bs=2M count=32
+dd if=/dev/zero of=$VDIR/a bs=1M count=64
+dd if=/dev/zero of=$VDIR/b bs=1M count=64
+dd if=/dev/zero of=$VDIR/c bs=1M count=64
 
-dd if=/dev/zero of=$VDIR2/a bs=2M count=32
-dd if=/dev/zero of=$VDIR2/b bs=2M count=32
-dd if=/dev/zero of=$VDIR2/c bs=2M count=32
+dd if=/dev/zero of=$VDIR2/a bs=1M count=64
+dd if=/dev/zero of=$VDIR2/b bs=1M count=64
+dd if=/dev/zero of=$VDIR2/c bs=1M count=64
 
 log_pass

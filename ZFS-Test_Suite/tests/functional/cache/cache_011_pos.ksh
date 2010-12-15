@@ -28,6 +28,10 @@
 #
 
 . $STF_SUITE/tests/functional/cache/cache.kshlib
+. $STF_SUITE/tests/functional/cache/cache.cfg
+. $STF_SUITE/include/default_common_varible.kshlib
+. $STF_SUITE/include/libtest.kshlib
+. $STF_SUITE/commands.cfg
 
 #################################################################################
 #
@@ -56,6 +60,11 @@
 verify_runnable "global"
 verify_disk_count "$LDEV2"
 
+VDIR=`ls / | grep "disk" | tail -1`
+LDEV="$1"
+LDEV2="$2"
+
+
 function cleanup {
 	if datasetexists $TESTPOOL ; then
 		log_must $ZPOOL destroy -f $TESTPOOL
@@ -67,7 +76,7 @@ log_onexit cleanup
 
 for type in "" "mirror" "raidz" "raidz2"
 do
-	log_must $ZPOOL create $TESTPOOL $type $VDEV \
+	log_must $ZPOOL create $TESTPOOL $type /$VDIR/a /$VDIR/b /$VDIR/c \
 		cache $LDEV spare $LDEV2
 
 	log_must $ZPOOL remove $TESTPOOL $LDEV

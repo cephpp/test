@@ -78,8 +78,8 @@ do
 		log_mustnot $ZPOOL add $TESTPOOL cache $cachetype $LDEV2
 		log_mustnot $ZPOOL add $TESTPOOL cache $cachetype $1 
 		#ldev=$(random_get $LDEV2)
-		#log_mustnot verify_cache_device \
-		#	$TESTPOOL $ldev 'ONLINE' $cachetype
+		log_mustnot verify_cache_device \
+			$TESTPOOL $ldev 'ONLINE' $cachetype
 
 		log_must umount $TESTPOOL	
 		log_must $ZPOOL destroy -f $TESTPOOL

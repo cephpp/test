@@ -72,7 +72,7 @@ do
 	
 	log_must $ZPOOL create -f $TESTPOOL $type /$VDIR/a /$VDIR/b /$VDIR/c \
 		cache $1
-	
+
 	sdev=$1
 	tdev=$2
 	log_mustnot $ZPOOL replace $TESTPOOL $sdev $tdev
