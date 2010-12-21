@@ -50,11 +50,11 @@ function overwrite_verify_mirror
 		seek=8 bs=$DD_BLOCK count=$(( DD_COUNT - 8 )) conv=notrunc
 
 	log_must $ZPOOL scrub $POOL
-
+	
 	typeset scrubbed="false"
 	while [[ "$scrubbed" != "true" ]]; do
 		$ZPOOL status $POOL | $GREP -s "scrub" \
-		    | $GREP -i "completed"
+		    | $GREP -i "repaired"
 		if [[ $? -eq 0 ]]; then
 			scrubbed="true"
 		fi
