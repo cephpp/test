@@ -37,9 +37,10 @@
 #fi
 
 log_must cleanup_quota
-log_must clean_user_group
-
-typeset mntp=$(get_prop mountpoint $QFS)
-log_must $CHMOD 0755 $mntp
-
+#typeset mntp=$(get_prop mountpoint $QFS)
+#log_must $CHMOD 0755 $mntp
+log_must $USERDEL $QUSER1
+log_must $USERDEL $QUSER2
+log_must $GROUPDEL $QGROUP
 default_cleanup
+

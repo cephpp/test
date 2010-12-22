@@ -52,8 +52,11 @@
 #
 ###############################################################################
 
+. $STF_SUITE/commands.cfg
+. $STF_SUITE/include/default_common_varible.kshlib
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/tests/functional/userquota/userquota_common.kshlib
+
 
 function cleanup
 {
@@ -69,7 +72,8 @@ log_assert "Check the zfs groupspace used and quota"
 
 log_must $ZFS set groupquota@$QGROUP=500m $QFS
 mkmount_writable $QFS
-log_must user_run $QUSER1 $MKFILE 100m $QFILE
+#log_must user_run $QUSER1 $MKFILE 100m $QFILE
+log_must user_run $QUSER1 $DD if=/dev/urandom of=$QFILE bs=1M count=100
 
 $SYNC
 

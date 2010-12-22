@@ -50,8 +50,11 @@
 #
 ###############################################################################
 
+. $STF_SUITE/commands.cfg
+. $STF_SUITE/include/default_common_varible.kshlib
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/tests/functional/userquota/userquota_common.kshlib
+
 
 verify_runnable "global"
 
@@ -73,7 +76,8 @@ log_assert \
 
 typeset pool_vdev=/var/tmp/pool_dev.$$
 
-log_must $MKFILE 500m $pool_vdev
+#log_must $MKFILE 500m $pool_vdev
+log_must $DD if=/dev/urandom  of=$pool_vdev bs=1M count=500
 
 if poolexists $TESTPOOL1; then
 	$ZPOOL destroy $TESTPOOL1

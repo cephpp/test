@@ -105,12 +105,12 @@ function user_run
 
         shift
 
-#        eval \$RUNWATTR -u \$user -g \$group \"$@\" > /dev/null 2>&1
+        eval \$RUNWATTR -u \$user -g \$group \"$@\" > /dev/null 2>&1
 #	echo "$@"
 	command=$@
-#	echo "user = $user group = $group"
-	$SU $user -c "$command" #> /dev/null 2>&1
-	ls -la /tank/zfs
+	#echo "user = $user group = $group r=$RUNWATTR"
+	log_must $SU $user -c "$command" #> /dev/null 2>&1
+	#ls -lsha /tank/zfs
 	echo "dd done"
         echo " user_run error status : $?"
 	return $?
@@ -129,6 +129,7 @@ function check_quota
 	if (( $value != $expected )); then
 		return 1
 	fi
+	return 0
 }
 
 #

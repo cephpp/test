@@ -39,6 +39,16 @@
 #fi
 
 #log_must clean_user_group
+if [ $(id -u) != 0 ]; then
+         echo "You Must run as root"
+	 exit 1	
+fi
+
+if [ $# != 1 ]
+then
+echo "USAGE: ./setup disk"
+exit 1;
+fi
 
 log_must add_group $QGROUP
 echo " add_group done "

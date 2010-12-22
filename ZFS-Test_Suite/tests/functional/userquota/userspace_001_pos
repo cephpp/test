@@ -52,8 +52,11 @@
 #
 ###############################################################################
 
+. $STF_SUITE/commands.cfg
+. $STF_SUITE/include/default_common_varible.kshlib
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/tests/functional/userquota/userquota_common.kshlib
+
 
 function cleanup
 {
@@ -82,7 +85,8 @@ typeset snap_fs=$QFS@snap
 
 log_must $ZFS set userquota@$QUSER1=100m $QFS
 mkmount_writable $QFS
-log_must user_run $QUSER1 $MKFILE 50m $QFILE
+#log_must user_run $QUSER1 $MKFILE 50m $QFILE
+log_must user_run $QUSER1 $DD if=/dev/urandom of=$QFILE bs=1M count=50
 $SYNC
 
 log_must $ZFS snapshot $snap_fs
@@ -90,6 +94,7 @@ log_must $ZFS snapshot $snap_fs
 for param in "${params[@]}"; do
 	log_must eval "$ZFS userspace $param $QFS >/dev/null 2>&1"
 	log_must eval "$ZFS userspace $param $snap_fs >/dev/null 2>&1"
+	
 done
 
 log_pass "zfs userspace with all possible parameters pass as expect"

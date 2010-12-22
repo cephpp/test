@@ -52,8 +52,13 @@
 #
 ###############################################################################
 
+. $STF_SUITE/commands.cfg
+. $STF_SUITE/include/default_common_varible.kshlib
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/tests/functional/userquota/userquota_common.kshlib
+
+###############################################################################
+
 
 function cleanup
 {
@@ -74,7 +79,7 @@ log_must $ZFS get groupquota@$QGROUP $QFS
 
 log_note "write some data to the $QFS"
 mkmount_writable $QFS
-log_must user_run $QUSER1 $MKFILE 100m $QFILE
+log_must user_run $QUSER1 $DD if=/dev/urandom  of=$QFILE bs=1M count=100
 $SYNC
 
 log_note "set user|group quota at a smaller size than it current usage"
