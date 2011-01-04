@@ -61,13 +61,13 @@ verify_runnable "both"
 
 function cleanup
 {
-	#if is_global_zone ; then
+	if is_global_zone ; then
 		log_must $ZFS set refreservation=none $TESTPOOL
 
 		if datasetexists $TESTPOOL@snap ; then
 			log_must $ZFS destroy -f $TESTPOOL@snap
 		fi
-	#fi
+	fi
 	log_must $ZFS destroy -rf $TESTPOOL/$TESTFS
 	log_must $ZFS create $TESTPOOL/$TESTFS
 	log_must $ZFS set mountpoint=$TESTDIR $TESTPOOL/$TESTFS
@@ -79,26 +79,25 @@ log_onexit cleanup
 
 log_must $ZFS create $TESTPOOL/$TESTFS/subfs
 
-#typeset datasets
-#if ! is_global_zone; then
+typeset datasets
+if ! is_global_zone; then
 	datasets="$TESTPOOL $TESTPOOL/$TESTFS $TESTPOOL/$TESTFS/subfs"
-#else
-#	datasets="$TESTPOOL/$TESTFS $TESTPOOL/$TESTFS/subfs"
-#fi
+else
+	datasets="$TESTPOOL/$TESTFS $TESTPOOL/$TESTFS/subfs"
+fi
 
 for ds in $datasets; do
 	#
 	# Verify refreservation on dataset
 	#
-	log_must $ZFS set quota=100M $ds
-	log_must $ZFS set refreservation=20M $ds
+	log_must $ZFS set quota=25M $ds
+	log_must $ZFS set refreservation=24.97M $ds
 	mntpnt=$(get_prop mountpoint $ds)
 	log_must $TOUCH $mntpnt/$TESTFILE
-	log_mustnot $ZFS snapshot $ds@snap
-	if datasetexists $ds@snap ; then
-		log_fail "ERROR: $ds@snap should not exists."
+	log_mustnot $ZFS snapshot $ds@snap.$ds
+	if datasetexists $ds@snap.$ds ; then
+		log_fail "ERROR: $ds@snap.$ds should not exists."
 	fi
-
 	log_must $ZFS set quota=none $ds
 	log_must $ZFS set refreservation=none $ds
 done
