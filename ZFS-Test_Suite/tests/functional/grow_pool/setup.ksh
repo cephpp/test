@@ -32,9 +32,20 @@
 . $STF_SUITE/include/default_common_varible.kshlib
 . $STF_SUITE/STF/usr/src/tools/stf/contrib/include/logapi.kshlib
 
+################################################################################
 
 tmp=/dev/$1
 
+if [ $(id -u) != 0 ]; then
+    echo "You must run as root"
+    exit 1;
+fi
+
+if [ $# != 1 ]; then
+   echo "Usage : ./grow_pool_001_pos.ksh <diskname1>"
+   exit 1;
+fi
+ 
 
 #verify_runnable "global"
 

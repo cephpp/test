@@ -62,11 +62,19 @@
 
 #log_assert "A zpool may be increased in capacity by adding a disk"
  
+if [ $(id -u) != 0 ]; then
+    echo "You must run as root"
+    exit 1;
+fi
 
+if [ $# != 1 ]; then
+   echo "Usage : ./grow_pool_001_pos.ksh <diskname2>"
+   exit 1;
+fi
  
 log_must $ZFS set compression=off $TESTPOOL/$TESTFS
 
-./$FILE_WRITE -o create -f $TESTDIR/$TESTFILE1 \
+$FILE_WRITE -o create -f $TESTDIR/$TESTFILE1 \
 	-b $BLOCK_SIZE -c $WRITE_COUNT -d 0
 
 typeset -i zret=$?
@@ -87,7 +95,7 @@ log_must $ZPOOL add -f  $TESTPOOL $DISK
 fi
 
 TESTFILE=$TESTFILE1
-log_must ./$FILE_WRITE -o append -f $TESTDIR/$TESTFILE \
+log_must $FILE_WRITE -o append -f $TESTDIR/$TESTFILE \
        -b $BLOCK_SIZE -c $SMALL_WRITE_COUNT -d 0
 
 
