@@ -29,7 +29,6 @@
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/include/default_common_varible.kshlib
 . $STF_SUITE/tests/functional/no_space/enospc.cfg
-#. $STF_SUITE/include/default_common_varible.kshlib
 
 ################################################################################
 #
@@ -60,22 +59,19 @@
 
 #verify_runnable "both"
 
-#log_assert "ENOSPC is returned when file system is full."
+log_assert "ENOSPC is returned when file system is full."
 log_must $ZFS set compression=off $TESTPOOL/$TESTFS
 
 log_note "Writing file: $TESTFILE0 until ENOSPC."
-echo $TESTPOOL
-echo $TESTFS
-./$FILE_WRITE -o create -f $TESTDIR/$TESTFILE0 -b $BLOCKSZ \
+$FILE_WRITE -o create -f $TESTDIR/$TESTFILE0 -b $BLOCKSZ \
     -c $NUM_WRITES -d $DATA
 ret=$?
-echo $TESTDIR
-echo $TESTFILE0
+
 (( $ret != $ENOSPC )) && \
     log_fail "$TESTFILE0 returned: $ret rather than ENOSPC."
 
 log_note "Write another file: $TESTFILE1 but expect ENOSPC."
-./$FILE_WRITE -o create -f $TESTDIR/$TESTFILE1 -b $BLOCKSZ \
+$FILE_WRITE -o create -f $TESTDIR/$TESTFILE1 -b $BLOCKSZ \
     -c $NUM_WRITES -d $DATA
 ret=$?
 
