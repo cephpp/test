@@ -27,16 +27,22 @@
 # ident	"@(#)setup.ksh	1.2	07/01/09 SMI"
 #
 
-#. $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/commands.cfg
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/include/default_common_varible.kshlib
-#. $STF_SUITE/STF/usr/src/tools/stf/contrib/include/logapi.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/STF/usr/src/tools/stf/contrib/include/logapi.kshlib
 
 
 DISK=$1
 
-#default_container_volume_setup ${DISK}
+if [ $(id -u) != 0 ]; then
+    echo "You must run as root"
+    exit 1;
+fi
+
+if [ $# != 1 ]; then
+   echo "Usage : ./setup.ksh <diskname>"
+   exit 1;
+fi
+
 default_setup $DISK
 

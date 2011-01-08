@@ -29,8 +29,6 @@
 . $STF_SUITE/commands.cfg
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/include/default_common_varible.kshlib
-#. $STF_SUITE/STF/usr/src/tools/stf/contrib/include/logapi.kshlib
-. /home/kqinfo/ZFS-test/ZFS-Test_Suite/STF/usr/src/tools/stf/contrib/include/logapi.kshlib
 . $STF_SUITE/tests/functional/snapshot/snapshot.cfg
 
 
@@ -106,7 +104,7 @@ log_note "Create files in the zfs filesystem..."
 
 typeset i=1
 while [ $i -lt $COUNT ]; do
-	log_must ./$FILE_WRITE -o $OP -f $TESTDIR/file$i -b $BLOCKSZ -c $NUM_WRITES -d $DATA
+	log_must $FILE_WRITE -o $OP -f $TESTDIR/file$i -b $BLOCKSZ -c $NUM_WRITES -d $DATA
 
 	(( i = i + 1 ))
 done
