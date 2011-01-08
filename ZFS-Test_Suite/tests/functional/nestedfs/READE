@@ -13,7 +13,6 @@ Steps to Run the nestedfs script:-
 
 	$  ./nestedfs_001_pos.ksh
 
-	( eg . $] ./nestedfs_001_pos.ksh sdd sde)
 
 3) Lastly run the cleanup.sh  script
 
