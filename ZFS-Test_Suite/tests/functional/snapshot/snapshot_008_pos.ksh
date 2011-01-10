@@ -26,7 +26,11 @@
 #
 # ident	"@(#)snapshot_008_pos.ksh	1.2	07/01/09 SMI"
 #
+
+. $STF_SUITE/commands.cfg
 . $STF_SUITE/include/libtest.kshlib
+. $STF_SUITE/include/default_common_varible.kshlib
+. $STF_SUITE/tests/functional/snapshot/snapshot.cfg
 
 ################################################################################
 #

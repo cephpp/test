@@ -26,7 +26,13 @@
 #
 # ident	"@(#)snapshot_006_pos.ksh	1.2	07/01/09 SMI"
 #
+
+
+. $STF_SUITE/commands.cfg
 . $STF_SUITE/include/libtest.kshlib
+. $STF_SUITE/include/default_common_varible.kshlib
+. $STF_SUITE/tests/functional/snapshot/snapshot.cfg
+
 
 ################################################################################
 #
@@ -64,17 +70,17 @@ function cleanup
 		cd $CWD || log_fail "Could not cd $CWD"
 	fi
 
-        snapexists $SNAPCTR
+        snapexists $SNAPFS
         if [[ $? -eq 0 ]]; then
-                log_must $ZFS destroy $SNAPCTR
+                log_must $ZFS destroy $SNAPFS
         fi
 
-        if [[ -e $SNAPDIR1 ]]; then
-                log_must $RM -rf $SNAPDIR1 > /dev/null 2>&1
+        if [[ -e $SNAPDIR ]]; then
+                log_must $RM -rf $SNAPDIR > /dev/null 2>&1
         fi
 
-        if [[ -e $TESTDIR1 ]]; then
-                log_must $RM -rf $TESTDIR1/* > /dev/null 2>&1
+        if [[ -e $TESTDIR ]]; then
+                log_must $RM -rf $TESTDIR/* > /dev/null 2>&1
         fi
 
 	if [[ -e /tmp/zfs_snapshot2.$$ ]]; then
@@ -91,52 +97,51 @@ log_onexit cleanup
 typeset -i COUNT=21
 typeset OP=create
 
-[[ -n $TESTDIR1 ]] && $RM -rf $TESTDIR1/* > /dev/null 2>&1
+[[ -n $TESTDIR ]] && $RM -rf $TESTDIR/* > /dev/null 2>&1
 
 log_note "Create files in the zfs dataset ..."
 
 typeset i=1
 while [ $i -lt $COUNT ]; do
-	log_must $FILE_WRITE -o $OP -f $TESTDIR1/file$i \
+	log_must $FILE_WRITE -o $OP -f $TESTDIR/file$i \
 	    -b $BLOCKSZ -c $NUM_WRITES -d $DATA
 
 	(( i = i + 1 ))
 done
 
-log_note "Create a tarball from $TESTDIR1 contents..."
-CWD=$PWD
-cd $TESTDIR1 || log_fail "Could not cd $TESTDIR1"
-log_must $TAR cf $TESTDIR1/tarball.original.tar file*
+log_note "Create a tarball from $TESTDIR contents..."
+CWD=`pwd`
+cd $TESTDIR || log_fail "Could not cd $TESTDIR"
+log_must $TAR cf $TESTDIR/tarball.original.tar file*
 cd $CWD || log_fail "Could not cd $CWD"
 
 log_note "Create a snapshot and mount it..."
-log_must $ZFS snapshot $SNAPCTR
+log_must $ZFS snapshot $SNAPFS
 
 log_note "Remove all of the original files..."
-log_must $RM -f $TESTDIR1/file* > /dev/null 2>&1
+log_must $RM -f $TESTDIR/file* > /dev/null 2>&1
 
 log_note "Create tarball of snapshot..."
-CWD=$PWD
-cd $SNAPDIR1 || log_fail "Could not cd $SNAPDIR1"
-log_must $TAR cf $TESTDIR1/tarball.snapshot.tar file*
+CWD=`pwd`
+cd $SNAPDIR || log_fail "Could not cd $SNAPDIR"
+log_must $TAR cf $TESTDIR/tarball.snapshot.tar file*
 cd $CWD || log_fail "Could not cd $CWD"
 
-log_must $MKDIR $TESTDIR1/original
-log_must $MKDIR $TESTDIR1/snapshot
+log_must $MKDIR $TESTDIR/original
+log_must $MKDIR $TESTDIR/snapshot
 
-CWD=$PWD
-cd $TESTDIR1/original || log_fail "Could not cd $TESTDIR1/original"
-log_must $TAR xf $TESTDIR1/tarball.original.tar
+CWD=`pwd`
+cd $TESTDIR/original || log_fail "Could not cd $TESTDIR/original"
+log_must $TAR xf $TESTDIR/tarball.original.tar
 
-cd $TESTDIR1/snapshot || log_fail "Could not cd $TESTDIR1/snapshot"
-log_must $TAR xf $TESTDIR1/tarball.snapshot.tar
+cd $TESTDIR/snapshot || log_fail "Could not cd $TESTDIR/snapshot"
+log_must $TAR xf $TESTDIR/tarball.snapshot.tar
 
 cd $CWD || log_fail "Could not cd $CWD"
-
-$DIRCMP $TESTDIR1/original $TESTDIR1/snapshot > /tmp/zfs_snapshot2.$$
+DIRCMP=$DIFF
+$DIRCMP $TESTDIR/original $TESTDIR/snapshot > /tmp/zfs_snapshot2.$$
 $GREP different /tmp/zfs_snapshot2.$$ >/dev/null 2>&1
 if [[ $? -ne 1 ]]; then
 	log_fail "Directory structures differ."
 fi
-
 log_pass "Directory structures match."
